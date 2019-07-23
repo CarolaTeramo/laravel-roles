@@ -3,7 +3,11 @@
 @section('content')
   <div class="container mt-5">
     <h1>Tutti i prodotti</h1>
-    <a href="{{ route('products.create') }}" class="btn btn-success">Aggiungi un nuovo prodotto</a>
+    @if (Auth::user()->can('edit_product'))
+      {{-- in can('edit_product') edit_product è il nome dentro la colonna name
+      nella tabella permissions del databse --}}
+      <a href="{{ route('products.create') }}" class="btn btn-success">Aggiungi un nuovo prodotto</a>
+    @endif
     <table class="table mt-3">
   <thead>
     <tr>
@@ -22,14 +26,16 @@
         <td>{{ $product->description}}</td>
         <td>{{ $product->price}}</td>
         <td><a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Visualizza</a></td>
-        <td><a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Modifica</a></td>
-        <td>
-          <form class="" action="{{ route('products.destroy', $product->id) }}" method="post">
-            @method ('DELETE')
-            @csrf
-            <input class="btn btn-danger" type="submit" name="" value="Elimina">
-          </form>
-        </td>
+        @if (Auth::user()->can('edit_product'))
+          <td><a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Modifica</a></td>
+          <td>
+            <form class="" action="{{ route('products.destroy', $product->id) }}" method="post">
+              @method ('DELETE')
+              @csrf
+              <input class="btn btn-danger" type="submit" name="" value="Elimina">
+            </form>
+          </td>
+        @endif
       </tr>
 
     @empty

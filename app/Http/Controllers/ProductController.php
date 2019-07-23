@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function __construct() {
+      //se metto middleware nel costruttore allora mi applica middleware
+      //a tutte le funzioni del costruttore
+      //view_product e edit_product sono i nomi dentro la colonna name
+      //nella tabella permissions del databse
+      $this->middleware('permission:view_product');
+      //puoi fare edit di tutte le funzioni tranne index e show
+      $this->middleware('permission:edit_product')->except(['index', 'show']);
+    }
 
     public function index()
     {

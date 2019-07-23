@@ -1,7 +1,10 @@
 <?php $__env->startSection('content'); ?>
   <div class="container mt-5">
     <h1>Tutti i prodotti</h1>
-    <a href="<?php echo e(route('products.create')); ?>" class="btn btn-success">Aggiungi un nuovo prodotto</a>
+    <?php if(Auth::user()->can('edit_product')): ?>
+      
+      <a href="<?php echo e(route('products.create')); ?>" class="btn btn-success">Aggiungi un nuovo prodotto</a>
+    <?php endif; ?>
     <table class="table mt-3">
   <thead>
     <tr>
@@ -20,14 +23,16 @@
         <td><?php echo e($product->description); ?></td>
         <td><?php echo e($product->price); ?></td>
         <td><a href="<?php echo e(route('products.show', $product->id)); ?>" class="btn btn-primary">Visualizza</a></td>
-        <td><a href="<?php echo e(route('products.edit', $product->id)); ?>" class="btn btn-warning">Modifica</a></td>
-        <td>
-          <form class="" action="<?php echo e(route('products.destroy', $product->id)); ?>" method="post">
-            <?php echo method_field('DELETE'); ?>
-            <?php echo csrf_field(); ?>
-            <input class="btn btn-danger" type="submit" name="" value="Elimina">
-          </form>
-        </td>
+        <?php if(Auth::user()->can('edit_product')): ?>
+          <td><a href="<?php echo e(route('products.edit', $product->id)); ?>" class="btn btn-warning">Modifica</a></td>
+          <td>
+            <form class="" action="<?php echo e(route('products.destroy', $product->id)); ?>" method="post">
+              <?php echo method_field('DELETE'); ?>
+              <?php echo csrf_field(); ?>
+              <input class="btn btn-danger" type="submit" name="" value="Elimina">
+            </form>
+          </td>
+        <?php endif; ?>
       </tr>
 
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
